@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { questions, Category } from './data/questions';
+import { words } from './data/words';
+import logo from './assets/logo123.png';
 import './App.css';
 
 // Fisher-Yates shuffle algorithm
@@ -14,18 +16,40 @@ function shuffleArray<T>(array: T[]): T[] {
 
 type FilterOption = Category | 'All';
 
-const categories: FilterOption[] = ['Miscellaneous', 'Science', 'Geography', 'History', 'Literature', 'Pop Culture', 'Food', 'Capitals', 'New', 'All'];
+type DeckCard = {
+  question: string;
+  answer: string;
+  category: Category;
+  example?: string;
+};
 
 function App() {
   const [selectedCategories, setSelectedCategories] = useState<Set<FilterOption>>(new Set(['All']));
+
+  const deck = useMemo((): DeckCard[] => {
+    const wordCards: DeckCard[] = words.map((w) => ({
+      question: `Define: ${w.word}`,
+      answer: w.definition,
+      example: w.example,
+      category: (w.category === 'New' ? 'New words' : 'Old words') as Category,
+    }));
+
+    return [...questions, ...wordCards];
+  }, []);
+
+  const categories = useMemo<FilterOption[]>(() => {
+    const set = new Set<Category>();
+    for (const item of deck) set.add(item.category);
+    return [...Array.from(set).sort((a, b) => a.localeCompare(b)), 'All'];
+  }, [deck]);
   
   // Filter questions based on selected categories
   const filteredQuestions = useMemo(() => {
     if (selectedCategories.has('All')) {
-      return questions;
+      return deck;
     }
-    return questions.filter(q => selectedCategories.has(q.category as FilterOption));
-  }, [selectedCategories]);
+    return deck.filter((q) => selectedCategories.has(q.category));
+  }, [selectedCategories, deck]);
 
   // Shuffle filtered questions when they change
   const shuffledQuestions = useMemo(() => shuffleArray(filteredQuestions), [filteredQuestions]);
@@ -157,6 +181,10 @@ function App() {
 
   return (
     <div className="app">
+      <div className="brand">
+        <img className="brand-logo" src={logo} alt="Trivia Train" />
+      </div>
+
       <div className="card">
         <div className="category-filter">
           <h3 className="filter-title">Filter by Category</h3>
@@ -184,8 +212,18 @@ function App() {
           <div className="answer-section">
             <h2 className="answer-label">Answer</h2>
             <p className="answer-text">{currentQuestion.answer}</p>
+            {currentQuestion.example && (
+              <p className="answer-example">
+                <span className="answer-example-label">Example: </span>
+                {currentQuestion.example}
+              </p>
+            )}
           </div>
         )}
+
+        <div className="progress">
+          {currentIndex + 1} / {shuffledQuestions.length}
+        </div>
 
         <div className="controls">
           <button 
@@ -207,10 +245,6 @@ function App() {
           >
             {isLastQuestion ? 'Start Over' : 'Next'}
           </button>
-        </div>
-
-        <div className="progress">
-          {currentIndex + 1} / {shuffledQuestions.length}
         </div>
       </div>
     </div>
