@@ -182,7 +182,11 @@ function App() {
   return (
     <div className="app">
       <div className="brand">
-        <img className="brand-logo" src={logo} alt="Trivia Train" />
+        <img
+          className="brand-logo"
+          src={logo}
+          alt={import.meta.env.VITE_APP_BRAND_ALT ?? 'Trivia Train'}
+        />
       </div>
 
       <div className="card">
