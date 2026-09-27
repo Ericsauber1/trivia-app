@@ -382,5 +382,29 @@ export const words: Word[] = [
 		definition: 'Understood or implied without being stated outright',
 		category: 'New',
 		example: 'There was a tacit agreement among the roommates that no one would touch the top shelf of the fridge.',
-	}
+	},
+	{
+		word: 'Guile',
+		definition: 'Sly or cunning intelligence, especially when used to deceive',
+		category: 'New',
+		example: 'He lacked the strength to win the argument outright, so he relied on guile, steering the committee toward his plan without anyone noticing.',
+	},
+	{
+		word: 'Irascible',
+		definition: 'Easily made angry; hot-tempered',
+		category: 'New',
+		example: 'The irascible old landlord would start shouting if you so much as parked a foot over the line.',
+	},
+	{
+		word: 'Homage',
+		definition: 'Special honor or respect shown publicly, often through a tribute or reference to someone\'s work',
+		category: 'New',
+		example: 'The film\'s opening shot is an homage to the director\'s favorite Hitchcock thriller.',
+	},
+	{
+		word: 'Infirmity',
+		definition: 'Physical or mental weakness, especially from age or illness',
+		category: 'New',
+		example: 'Despite the infirmity of his later years, he still insisted on walking to the corner store every morning.',
+	},
 ];
